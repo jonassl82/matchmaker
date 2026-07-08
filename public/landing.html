@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matchmaker · Private introductions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F4EDE1; --paper2:#EFE6D6; --card:#FBF7EF;
+    --ink:#24201B; --soft:#5C5347; --faint:#9C907D;
+    --wine:#7A2E33; --wine-soft:rgba(122,46,51,.08);
+    --rule:rgba(36,32,27,.14);
+    --serif:"Newsreader",Georgia,serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:var(--serif);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:620px;margin:0 auto;padding:0 24px}
+  .mono{font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--wine)}
+  .rule{height:1px;background:var(--rule);margin:0 auto;max-width:620px}
+  section{padding:52px 0}
+  a{color:var(--wine)}
+  .hero{padding:66px 0 56px}
+  .hero h1{font-weight:500;font-size:clamp(34px,7.5vw,52px);line-height:1.08;letter-spacing:-.015em;margin:20px 0 18px}
+  .hero .lede{font-size:18px;color:var(--soft);max-width:46ch;font-style:italic}
+  .micro{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--faint);margin-top:16px}
+  form.join{display:flex;gap:9px;margin-top:26px;max-width:440px;flex-wrap:wrap}
+  input[type=email]{flex:1;min-width:200px;font-family:var(--serif);font-size:16px;color:var(--ink);background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:13px 15px}
+  input[type=email]::placeholder{color:var(--faint)}
+  input[type=email]:focus{outline:none;border-color:var(--wine)}
+  button{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--paper);background:var(--wine);border:none;border-radius:6px;padding:13px 20px;cursor:pointer;transition:.15s;white-space:nowrap}
+  button:hover{background:#682529}
+  .done{font-style:italic;font-size:16px;color:var(--wine);margin-top:26px;max-width:440px}
+  h2{font-weight:500;font-size:26px;letter-spacing:-.01em;margin:14px 0 22px}
+  .step{display:flex;gap:18px;padding:16px 0;border-top:1px solid var(--rule)}
+  .step:first-of-type{border-top:none}
+  .step .n{font-family:var(--mono);font-size:12px;color:var(--wine);padding-top:5px;min-width:24px}
+  .step h3{font-weight:500;font-size:19px;margin-bottom:5px}
+  .step p{font-size:15.5px;color:var(--soft);max-width:48ch}
+  .peek{background:var(--card);border:1px solid var(--rule);border-top:3px solid var(--wine);padding:26px 26px 24px;border-radius:2px}
+  .peek .tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);margin-bottom:16px}
+  .peek .top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .peek .nm{font-weight:500;font-size:21px}
+  .peek .nm .ct{color:var(--faint);font-style:italic;font-weight:400;font-size:17px}
+  .peek .ig{font-family:var(--mono);font-size:12px;color:var(--wine)}
+  .peek .desc{font-size:16px;margin:10px 0 15px;max-width:52ch}
+  .peek .lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);margin-bottom:5px}
+  .peek .open{font-size:15px;color:var(--soft);margin-bottom:15px}
+  .where{background:var(--wine-soft);border-left:2px solid var(--wine);padding:12px 15px}
+  .where .lbl{color:var(--wine);opacity:.85}
+  .where ul{list-style:none;margin-top:3px}
+  .where li{font-size:15px;padding:3px 0}
+  .where li .det{color:var(--faint);font-style:italic}
+  .turn .lines{font-size:20px;color:var(--soft);line-height:2}
+  .turn p{font-size:19px;color:var(--ink);max-width:44ch}
+  .safety{background:var(--paper2)}
+  .safety p{font-size:16px;color:var(--soft);max-width:52ch;margin-bottom:14px}
+  .safety b{color:var(--ink);font-weight:500}
+  .men{border-top:1px solid var(--rule)}
+  .men .mono{color:var(--faint)}
+  .men h2{font-size:22px}
+  .men p{font-size:16px;color:var(--soft);max-width:50ch;margin-bottom:20px}
+  .men button{background:transparent;color:var(--wine);border:1px solid var(--wine)}
+  .men button:hover{background:var(--wine);color:var(--paper)}
+  footer{padding:40px 0 56px;text-align:center}
+  footer .mono{color:var(--faint);letter-spacing:.16em}
+  footer .fine{font-style:italic;font-size:13px;color:var(--faint);margin-top:10px}
+  @media(max-width:520px){.hero{padding:48px 0 40px}form.join button{width:100%}}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="mono">Matchmaker · Private introductions · Invite only</div>
+      <h1>Done with the apps.<br>Still open to meeting someone.</h1>
+      <p class="lede">Once a week, a short private letter. A few vetted men, and the real places
+      you could meet them. You stay invisible, and you decide who ever gets access to you.</p>
+      <form class="join" data-kind="woman">
+        <input type="email" placeholder="your email" required aria-label="your email">
+        <button type="submit">Request an invite</button>
+      </form>
+      <div class="micro">Five a week. Hand-picked. Never a catalogue.</div>
+    </div>
+  </div>
+  <div class="rule"></div>
+  <div class="wrap"><section>
+    <div class="mono">How it works</div>
+    <h2>Three steps, and two of them are ours.</h2>
+    <div class="step"><div class="n">01</div><div><h3>You join, and you disappear.</h3><p>Your name is never shown to anyone. No profile to build, nothing to maintain, nothing to perform.</p></div></div>
+    <div class="step"><div class="n">02</div><div><h3>Every week, a few men.</h3><p>Each one vetted, single or clearly open, written up like a friend would describe him. And two or three real places he's actually going.</p></div></div>
+    <div class="step"><div class="n">03</div><div><h3>You make the only move that matters.</h3><p>Message him yourself and mention Matchmaker, or reply and ask us for a warm introduction. Or do nothing, and next week comes anyway.</p></div></div>
+  </section></div>
+  <div class="rule"></div>
+  <div class="wrap"><section>
+    <div class="mono">A page from this week's letter</div>
+    <h2 style="margin-bottom:24px">This is what lands in your inbox.</h2>
+    <div class="peek">
+      <div class="tag">One of five</div>
+      <div class="top"><div class="nm">Mark, 46 <span class="ct">· Het Gooi</span></div><div class="ig">@markdejong</div></div>
+      <p class="desc">Founder, two kids half the week, properly grown up but still first onto the floor at the right party. Calm, outdoorsy, good at plans that don't feel like effort.</p>
+      <div class="lbl">Open to</div>
+      <div class="open">A walk that turns into drinks, a day festival, Sunday lunch.</div>
+      <div class="where"><div class="lbl">Where you'll find him</div><ul>
+        <li>Vroeg Pieken <span class="det">next Utrecht edition</span></li>
+        <li>Beach weekends near Bloemendaal</li>
+        <li>A quiet wine bar in Laren <span class="det">he'd actually take you to</span></li>
+      </ul></div>
+    </div>
+  </section></div>
+  <div class="rule"></div>
+  <div class="wrap"><section class="turn">
+    <div class="mono">Why it's different</div>
+    <div class="lines">No swiping.<br>No inbox to survive.<br>No profile to perform.</div>
+    <p style="margin-top:26px">The apps hand you everyone and call it choice. This hands you a few people worth meeting, and a reason to say hello.</p>
+  </section></div>
+  <div class="rule"></div>
+  <div class="wrap"><section class="safety" style="margin:0 -24px;padding:52px 24px;">
+    <div class="mono">Safe by design</div>
+    <h2>You're the private side, and it stays that way.</h2>
+    <p>Men agree to be shown to a few women who opted in. <b>You agree to nothing but reading.</b> You are never listed, never searchable, and never forwarded. You can leave with a single reply.</p>
+    <p>Everyone is checked for a real identity, a clear single or open status, and a genuine willingness to actually meet. <b>When in doubt, they're left out.</b></p>
+  </section></div>
+  <div class="wrap"><section class="men">
+    <div class="mono">For men</div>
+    <h2>Done competing in apps?</h2>
+    <p>Apply to be introduced to women who opted in to meet someone. A short application, a real vetting, and if you're a fit, a place in the weekly letter. You're shown to no one until a woman chooses you.</p>
+    <form class="join" data-kind="man">
+      <input type="email" placeholder="your email" required aria-label="your email">
+      <button type="submit">Apply to be introduced</button>
+    </form>
+  </section></div>
+  <div class="rule"></div>
+  <footer>
+    <div class="mono">Matchmaker · Private introductions</div>
+    <div class="fine">Made with care. Sent rarely. Read in private.</div>
+  </footer>
+<script>
+  document.querySelectorAll('form.join').forEach(function(f){
+    f.addEventListener('submit', async function(e){
+      e.preventDefault();
+      var kind = f.dataset.kind;
+      var email = f.querySelector('input[type=email]').value;
+      try{
+        await fetch('/api/signup', {
+          method:'POST', headers:{'content-type':'application/json'},
+          body: JSON.stringify({ kind: kind, email: email })
+        });
+      }catch(err){}
+      var msg = kind === 'man'
+        ? "Thank you. If you're a fit, you'll hear from us before the next letter goes out."
+        : "You're on the list. The next letter is coming, and you'll be on it.";
+      var note = document.createElement('div');
+      note.className = 'done'; note.textContent = msg;
+      f.replaceWith(note);
+    });
+  });
+</script>
+</body>
+</html>
